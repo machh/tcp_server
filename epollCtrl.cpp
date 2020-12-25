@@ -20,3 +20,17 @@ epollCtrl::epollCtrl(){
 epollCtrl::~epollCtrl(){
 
 }
+int epollCtrl::epoll_create(int size) {
+
+    return 0;
+}
+
+int epollCtrl::epoll_wait(int epfd, struct epoll_event *event, int maxevents, int timeout) {
+
+    return 0;
+}
+
+int epollCtrl::epoll_ctl(int epfd, int op, int fd, struct epoll_event *event) {
+
+    return 0;
+}

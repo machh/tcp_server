@@ -5,6 +5,22 @@
 #ifndef EPOLL_EPOLLCTRL_H
 #define EPOLL_EPOLLCTRL_H
 
+/*
+ * events : {EPOLLIN, EPOLLOUT, EPOLLPRI,
+            EPOLLHUP, EPOLLET, EPOLLONESHOT }
+ */
+
+struct epoll_event {
+    __uint32_t events; /* epoll 事件 */
+    epoll_data_t data; /* 用户传递的数据 */
+}
+
+typedef union epoll_data {
+    void *ptr;
+    int fd;
+    uint32_t u32;
+    uint64_t u64;
+} epoll_data_t;
 
 class epollCtrl {
 
@@ -34,6 +50,21 @@ public:
      *          失败: -1, errno 查看错误
      */
     int epoll_wait(int epfd, struct epoll_event *event, int maxevents, int timeout);
+
+    /**
+     * @param epfd 用epoll_create所创建的epoll句柄
+     * @param op 表示对epoll监控描述符控制的动作
+     *
+     * EPOLL_CTL_ADD(注册新的fd到epfd)
+     * EPOLL_CTL_MOD(修改已经注册的fd的监听事件)
+     * EPOLL_CTL_DEL(epfd删除一个fd)
+     *
+     * @param fd 需要监听的文件描述符
+     * @param event 告诉内核需要监听的事件
+     *
+     * @returns 成功返回0，失败返回-1, errno查看错误信息
+     */
+    int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
 
 };
 
