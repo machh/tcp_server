@@ -1,5 +1,5 @@
 //
-// Created by machenghai on 2020/12/23.
+// Created by machh on 2020/12/23.
 //
 #ifndef EPOLL_SOCKET_H
 #define EPOLL_SOCKET_H
@@ -12,20 +12,23 @@ const int IP_SIZE = 24;
 
 class Socket {
 public:
-
-    // constructor
     Socket();
+
+    // 内部调用create
     Socket(const char* host, unsigned int port);
 
-    // destructor
     virtual ~Socket();
-
 
 public:
     bool create();
-
-    // close connection
     void close();
+
+    bool listen(int backlog);
+
+    SOCKET accept(struct sockaddr* addr, unsigned int* addrlen);
+
+    bool bind();
+    bool bind(unsigned int port);
 
     // try connect to remote host
     bool connect();
@@ -41,13 +44,6 @@ public:
     unsigned int receive(void* buf, unsigned int len, unsigned int flags = 0);
 
     unsigned int available()const;
-
-    SOCKET accept(struct sockaddr* addr, unsigned int* addrlen);
-
-    bool bind();
-    bool bind(unsigned int port);
-
-    bool listen(int backlog);
 
 public:
 
@@ -85,19 +81,11 @@ public:
     bool isSockError()const;
 
 public:
-
     SOCKET m_SocketID;
-
-    // socket address structure
     SOCKADDR_IN m_SockAddr;
 
-    // peer host
     char m_Host[IP_SIZE];
-
-    // peer port
     unsigned int m_Port;
-
-
 };
 
 

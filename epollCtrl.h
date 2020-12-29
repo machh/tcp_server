@@ -1,26 +1,28 @@
 //
-// Created by machenghai on 2020/12/23.
+// Created by machh on 2020/12/23.
 //
 
 #ifndef EPOLL_EPOLLCTRL_H
 #define EPOLL_EPOLLCTRL_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+
+#include <sys/epoll.h>
 
 /*
  * events : {EPOLLIN, EPOLLOUT, EPOLLPRI,
             EPOLLHUP, EPOLLET, EPOLLONESHOT }
  */
 
-struct epoll_event {
-    __uint32_t events; /* epoll 事件 */
-    epoll_data_t data; /* 用户传递的数据 */
-}
 
-typedef union epoll_data {
-    void *ptr;
-    int fd;
-    uint32_t u32;
-    uint64_t u64;
-} epoll_data_t;
 
 class epollCtrl {
 
