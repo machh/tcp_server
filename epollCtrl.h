@@ -68,6 +68,8 @@ public:
      */
     int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
 
+    int epfd = 0;
+
 };
 
 
