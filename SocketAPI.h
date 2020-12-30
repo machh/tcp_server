@@ -155,15 +155,6 @@ namespace SocketAPI {
     bool closesocket_ex(SOCKET s);
 
     /**
-     * 非阻塞 WIN32 适用
-     * @param s         socket descriptor
-     * @param cmd
-     * @param argp
-     * @return
-     */
-    bool ioctlsocket_ex(SOCKET s, long cmd, unsigned long* argp);
-
-    /**
      * 获得socket是否是阻塞的
      * @param s         socket descriptor
      * @return          true 非阻塞, false 阻塞
@@ -177,6 +168,15 @@ namespace SocketAPI {
      * @return          true:SUCCESS false:FAIL
      */
     bool setsocketnonblocking_ex(SOCKET s, bool on);
+
+    /**
+     * 非阻塞 WIN32 适用
+     * @param s         socket descriptor
+     * @param cmd
+     * @param argp
+     * @return
+     */
+    bool ioctlsocket_ex(SOCKET s, long cmd, unsigned long* argp);
 
     /**
      * 查看socket还有多少未处理数据

@@ -297,8 +297,12 @@ bool SocketAPI::setsocketnonblocking_ex(SOCKET s, bool on) {
         flags = 0;
     }
 
-    if (on) flags |= O_NONBLOCK; // make nonblocking fd
-    else flags &= ~O_NONBLOCK; // make blocking fd
+    if (on) {
+        flags |= O_NONBLOCK; // make nonblocking fd
+    }
+    else {
+        flags &= ~O_NONBLOCK; // make blocking fd
+    }
 
     fcntl(s, F_SETFL, flags);
 
