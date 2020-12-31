@@ -14,6 +14,25 @@
 // 媒体转发服务器-TCP 在 EPOLL模型中的注意细节 https://blog.csdn.net/liuhongxiangm/article/details/17299025
 // Epoll示例 https://blog.csdn.net/yuanchunsi/article/details/72914576
 
+//  https://github.com/diycat1024/ccnet
+
+#if 0
+第三个参数是需要监听的fd，第四个参数是告诉内核需要监听什么事，struct epoll_event结构如下：
+struct epoll_event {
+  __uint32_t events;  /* Epoll events */
+epoll_data_t data;  /* User data variable */
+};
+
+events可以是以下几个宏的集合：
+EPOLLIN ：表示对应的文件描述符可以读（包括对端SOCKET正常关闭）；
+EPOLLOUT：表示对应的文件描述符可以写；
+EPOLLPRI：表示对应的文件描述符有紧急的数据可读（这里应该表示有带外数据到来）；
+EPOLLERR：表示对应的文件描述符发生错误；
+EPOLLHUP：表示对应的文件描述符被挂断；
+EPOLLET： 将EPOLL设为边缘触发(Edge Triggered)模式，这是相对于水平触发(Level Triggered)来说的。
+EPOLLONESHOT：只监听一次事件，当监听完这次事件之后，如果还需要继续监听这个socket的话，需要再次把这个socket加入到EPOLL队列里
+
+#endif
 
 #define SERVER_PORT         (7778)
 #define EPOLL_MAX_NUM       (2048)
@@ -88,3 +107,41 @@ int epollCtrl::epoll_ctl(int epfd, int op, int fd, struct epoll_event *event) {
     return 0;
 }
 
+//预览数据
+size_t recvPeek(int sockfd, void *buf, size_t len)
+{
+    int nread;
+    do
+    {
+        nread = ::recv(sockfd, buf, len, MSG_PEEK);
+    }
+    while(nread == -1 && errno == EINTR);
+
+    return nread;
+}
+// https://github.com/icoty/cs_threadpool_epoll_mq/blob/master/src/net/EpollPoller.cpp
+//通过预览数据 判断conn是否关闭
+bool isConnectionClosed(int sockfd)
+{
+    char buf[1024];
+    ssize_t nread = recvPeek(sockfd, buf, sizeof buf);
+    if(nread == -1)
+    {
+        //LogError("recvPeek!");
+    }
+
+    return (nread == 0);
+}
+
+int epollCtrl::start_epoll(){
+    return 0;
+}
+int epollCtrl::stop_epoll(){
+    return 0;
+}
+bool epollCtrl::is_run(){
+    return 0;
+}
+int epollCtrl::start_event_loop(){
+    return 0;
+}

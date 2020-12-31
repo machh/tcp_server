@@ -3,6 +3,7 @@
 #include <atomic>
 #include <list>
 #include <memory>
+#include <string.h>
 
 #include "epollCtrl.h"
 

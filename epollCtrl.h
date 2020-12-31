@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <string.h>
+#include <string>
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -22,7 +22,42 @@
             EPOLLHUP, EPOLLET, EPOLLONESHOT }
  */
 
+class EpollContext {
+public:
+    EpollContext();
+    std::string to_string();
 
+    long long _id;
+    void *ptr;
+    int fd;
+    time_t _last_interact_time; // unit is second
+    std::string client_ip;
+    int _ctx_status;
+};
+
+class EpollSocketWatcher {
+public:
+    virtual int on_accept(EpollContext &epoll_context) = 0;
+
+    virtual int on_readable(int &epollfd, epoll_event &event) = 0;
+
+    /**
+     * return :
+     * if return value == 1, we will close the connection
+     * if return value == 2, we will continue to write
+     */
+    virtual int on_writeable(EpollContext &epoll_context) = 0;
+
+    virtual int on_close(EpollContext &epoll_context) = 0;
+
+};
+
+enum EpollSocketStatus {
+    S_INIT = 0,
+    S_RUN = 1,
+    S_REJECT_CONN = 2,
+    S_STOP = 3
+};
 
 class epollCtrl {
 
@@ -68,6 +103,12 @@ public:
      */
     int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
 
+    int start_epoll();
+    int stop_epoll();
+    bool is_run();
+    int start_event_loop();
+
+public:
     int epfd = 0;
 
 };
