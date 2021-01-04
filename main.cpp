@@ -8,6 +8,7 @@
 #include "epollCtrl.h"
 
 #include "Socket.h"
+using namespace SocketAPI;
 
 void processClientRead(SOCKET clientsock, std::atomic<bool>* _flag) {
     char buf[256] = {0};
@@ -25,6 +26,39 @@ void processClientRead(SOCKET clientsock, std::atomic<bool>* _flag) {
 int main() {
     std::cout << "Hello, World!" << std::endl;
 
+    SOCKET socketID = SocketAPI::socket_ex(AF_INET, SOCK_STREAM, 0);
+
+    std::cout << "socketID = " << socketID<< std::endl;
+
+    SOCKADDR_IN m_SockAddr;
+    m_SockAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    m_SockAddr.sin_port = htons(7700);
+
+    bool bok = SocketAPI::bind_ex(socketID, (const struct sockaddr *) &m_SockAddr, sizeof (m_SockAddr));
+    if(!bok){
+        std::cout << "bind_ex error !" << std::endl;
+        return -1;
+    }
+    std::cout << "bind_ex = " << bok<< std::endl;
+
+    listen_ex(socketID, false);
+
+    for (;;){
+        sockaddr addr;
+        unsigned int len = sizeof(sockaddr);
+        SOCKET clientSock = SocketAPI::accept_ex(socketID, &addr, &len);
+
+        std::atomic<bool>* _flag = new std::atomic<bool>(true);
+        std::thread __readthread(processClientRead, clientSock, _flag);
+        __readthread.detach();
+
+    }
+
+    std::cout << "Done !" << std::endl;
+    return 0;
+
+
+#if 0
     Socket sck("192.168.1.101", 9000);
     sck.bind();
     sck.listen(false);
@@ -42,8 +76,7 @@ int main() {
     }
 
     sck.close();
-
-    std::cout << "Done !" << std::endl;
+#endif
 
     return 0;
 }

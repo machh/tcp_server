@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall  -O0 -Wall -g2 -ggdb  -rdynamic CMakeFiles/server.dir/Socket.cpp.o CMakeFiles/server.dir/SocketAPI.cpp.o CMakeFiles/server.dir/epollCtrl.cpp.o CMakeFiles/server.dir/main.cpp.o  -o server -lpthread 

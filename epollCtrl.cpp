@@ -96,7 +96,7 @@ int epollCtrl::epoll_wait(int epfd, struct epoll_event *event, int maxevents, in
 
 int epollCtrl::epoll_ctl(int epfd, int op, int fd, struct epoll_event *event) {
     //struct epoll_event event, *my_events;
-    op = EPOLL_CTL_ADD;
+    //op = EPOLL_CTL_ADD;
     event->events = EPOLLIN;
     event->data.fd = fd;
     if (epoll_ctl(epfd, op, fd, event) < 0) {

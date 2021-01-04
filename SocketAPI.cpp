@@ -28,7 +28,7 @@ SOCKET SocketAPI::socket_ex(int domain, int type, int protocol) {
 }
 
 bool SocketAPI::bind_ex(SOCKET s, const struct sockaddr* addr, unsigned int addrlen) {
-    if (bind(s, addr, addrlen) == SOCKET_ERROR) {
+    if (::bind(s, addr, addrlen) == SOCKET_ERROR) {
         switch (errno) {
             case EADDRINUSE:
             case EINVAL:
@@ -51,7 +51,7 @@ bool SocketAPI::bind_ex(SOCKET s, const struct sockaddr* addr, unsigned int addr
 }
 
 bool SocketAPI::connect_ex(SOCKET s, const struct sockaddr * addr, unsigned int addrlen) {
-    if (connect(s, addr, addrlen) == SOCKET_ERROR) {
+    if (::connect(s, addr, addrlen) == SOCKET_ERROR) {
         switch (errno) {
             case EALREADY:
             case EINPROGRESS:
@@ -72,7 +72,7 @@ bool SocketAPI::connect_ex(SOCKET s, const struct sockaddr * addr, unsigned int 
 }
 
 bool SocketAPI::listen_ex(SOCKET s, unsigned int backlog) {
-    if (listen(s, backlog) == SOCKET_ERROR) {
+    if (::listen(s, backlog) == SOCKET_ERROR) {
         switch (errno) {
             case EBADF:
             case ENOTSOCK:
@@ -86,7 +86,7 @@ bool SocketAPI::listen_ex(SOCKET s, unsigned int backlog) {
 }
 
 SOCKET SocketAPI::accept_ex(SOCKET s, struct sockaddr* addr, unsigned int* addrlen) {
-    SOCKET client = accept(s, addr, addrlen);
+    SOCKET client = ::accept(s, addr, addrlen);
     if (client == INVALID_SOCKET) {
         switch (errno) {
             case EWOULDBLOCK:
@@ -330,7 +330,7 @@ bool SocketAPI::shutdown_ex(SOCKET s, unsigned int how) {
 }
 
 int SocketAPI::select_ex(int maxfdp1, fd_set* readset, fd_set* writeset, fd_set* exceptset, struct timeval* timeout) {
-    int result;
+    int result = -1;
     try {
         result = select(maxfdp1, readset, writeset, exceptset, timeout);
         if (result == SOCKET_ERROR) {
