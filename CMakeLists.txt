@@ -27,6 +27,4 @@ file(GLOB SOURCE_FILES
         )
 
 add_executable(server ${SOURCE_FILES})
-target_link_libraries(${CMAKE_PROJECT_NAME}
-        -lpthread
-        )
+target_link_libraries(${CMAKE_PROJECT_NAME} -lpthread  )
